@@ -1,0 +1,28 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    ports:
+      - 1883:1883
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/log:/mosquitto/log
+  fetcher:
+    build: git@github.com:MicroWebStacks/copper.git#main:fetcher
+    volumes:
+      - ../cache/fetch:/fetch
+    depends_on:
+      - mosquitto
+  markdown:
+    build: git@github.com:HomeSmartMesh/website_services.git#main:markdown
+    volumes:
+      - ../cache/fetch:/fetch
+      - ../cache/process:/process
+      - ../cache/web:/web
+  runner:
+    build: https://github.com/MicroWebStacks/copper.git#main:runner
+    volumes:
+      - ../workflow.yaml:/app/workflow.yaml
+    depends_on:
+      - fetcher
+      - markdown

@@ -21,3 +21,5 @@ docker compose up
 ```
 
 all actions will run and the build will be available in `./cache` folder
+
+for more details about how this works, see https://github.com/MicroWebStacks/copper
